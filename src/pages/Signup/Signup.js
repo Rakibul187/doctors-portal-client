@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../Contexts/AuthProvider/AuthProvider';
 
 const Signup = () => {
     const { handleSubmit, register, formState: { errors } } = useForm()
+    const { creatUser } = useContext(AuthContext)
 
     const handleSignup = data => {
         console.log(data)
+        creatUser(data.email, data.password)
+            .then(result => {
+                const user = result.user;
+                console.log(user)
+            })
+            .catch(e => console.error(e))
     }
     return (
         <div className='h-[400px] flex justify-center mt-6 mb-24'>
@@ -33,8 +41,9 @@ const Signup = () => {
                         <label className="label"><span className="label-text">Password</span></label>
                         <input type="password" className="input input-bordered w-full"
                             {...register("password", {
-                                required: "Password Address is required",
-                                minLength: { value: 8, message: "Password must be 8 charactures or longer" }
+                                required: "Password is required",
+                                minLength: { value: 8, message: "Password must be 8 charactures or longer" },
+                                pattern: { value: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])/, message: 'Password must be stronger' }
                             })}
                             aria-invalid={errors.password ? "true" : "false"}
                         />
