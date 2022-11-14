@@ -1,17 +1,26 @@
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
-const Login = () => {
-    const { register, formState: { errors }, handleSubmit } = useForm()
+const Signup = () => {
+    const { handleSubmit, register, formState: { errors } } = useForm()
 
-    const handleLogin = data => {
+    const handleSignup = data => {
         console.log(data)
     }
     return (
-        <div className='h-[400px] flex justify-center mt-6 mb-20'>
+        <div className='h-[400px] flex justify-center mt-6 mb-24'>
             <div className='w-96 p-7'>
-                <h1 className='text-2xl mb-3 font-bold text-center'>Login</h1>
-                <form onSubmit={handleSubmit(handleLogin)}>
+                <h1 className='text-2xl mb-3 font-bold text-center'>Sign up</h1>
+                <form onSubmit={handleSubmit(handleSignup)}>
+                    <div className="form-control w-full">
+                        <label className="label"><span className="label-text">Your Name</span></label>
+                        <input type="text" className="input input-bordered w-full"
+                            {...register("name", { required: "Name is required" })}
+                            aria-invalid={errors.name ? "true" : "false"}
+                        />
+                        {errors.name && <p className='text-red-600' >{errors.name?.message}</p>}
+                    </div>
                     <div className="form-control w-full">
                         <label className="label"><span className="label-text">Email</span></label>
                         <input type="email" className="input input-bordered w-full"
@@ -30,11 +39,10 @@ const Login = () => {
                             aria-invalid={errors.password ? "true" : "false"}
                         />
                         {errors.password && <p className='text-red-600' >{errors.password?.message}</p>}
-                        <label className="label"><span className="label-text">Forget Password?</span></label>
                     </div>
-                    <input className='btn btn-accent w-full rounded-xl input-sm' value='login' type="submit" />
+                    <input className='btn btn-accent w-full rounded-xl input-sm' value='Sign up' type="submit" />
                 </form>
-                <small>New to doctors portal? <Link className='text-secondary' to='/signup'>Create a new account</Link></small>
+                <small>Already have an account? <Link className='text-secondary' to='/login'>please login</Link></small>
                 <div className="divider">or</div>
                 <button className='btn btn-outline w-full'>CONTINUE WITH GOOGLE</button>
             </div>
@@ -43,4 +51,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Signup;
