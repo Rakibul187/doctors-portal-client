@@ -1,11 +1,18 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../Contexts/AuthProvider/AuthProvider';
 
 const Signup = () => {
     const { handleSubmit, register, formState: { errors } } = useForm()
-    const { creatUser } = useContext(AuthContext)
+    const { creatUser, updateUser } = useContext(AuthContext)
+    const [signUpError, setSignUpError] = useState('')
+
+
+    const location = useLocation()
+    const navigate = useNavigate()
+    const from = location.state?.from.pathname || "/";
 
     const handleSignup = data => {
         console.log(data)
@@ -13,8 +20,21 @@ const Signup = () => {
             .then(result => {
                 const user = result.user;
                 console.log(user)
+                toast('User Created Successfully')
+
+                const userInfo = {
+                    displayName: data.name
+                }
+                updateUser(userInfo)
+                    .then(() => {
+                        navigate(from, { replace: true })
+                    })
+                    .catch(e => console.error(e))
             })
-            .catch(e => console.error(e))
+            .catch(e => {
+                console.error(e)
+                setSignUpError(e.message)
+            })
     }
     return (
         <div className='h-[400px] flex justify-center mt-6 mb-24'>
@@ -51,6 +71,7 @@ const Signup = () => {
                     </div>
                     <input className='btn btn-accent w-full rounded-xl input-sm' value='Sign up' type="submit" />
                 </form>
+                {signUpError && <p className='text-red-600'>{signUpError}</p>}
                 <small>Already have an account? <Link className='text-secondary' to='/login'>please login</Link></small>
                 <div className="divider">or</div>
                 <button className='btn btn-outline w-full'>CONTINUE WITH GOOGLE</button>

@@ -1,11 +1,16 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Contexts/AuthProvider/AuthProvider';
 
 const Login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm()
     const { signIn } = useContext(AuthContext)
+    const [loginError, setLoginError] = useState('')
+
+    const location = useLocation()
+    const navigate = useNavigate()
+    const from = location.state?.from.pathname || "/";
 
     const handleLogin = data => {
         console.log(data)
@@ -14,8 +19,13 @@ const Login = () => {
             .then(result => {
                 const user = result.user;
                 console.log(user)
+                navigate(from, { replace: true })
+                setLoginError('')
             })
-            .catch(e => console.error(e))
+            .catch(e => {
+                setLoginError(e.message)
+                console.error(e)
+            })
     }
 
     return (
@@ -45,6 +55,9 @@ const Login = () => {
                     </div>
                     <input className='btn btn-accent w-full rounded-xl input-sm' value='login' type="submit" />
                 </form>
+                {
+                    loginError && <p className='text-red-600'>{loginError}</p>
+                }
                 <small>New to doctors portal? <Link className='text-secondary' to='/signup'>Create a new account</Link></small>
                 <div className="divider">or</div>
                 <button className='btn btn-outline w-full'>CONTINUE WITH GOOGLE</button>
