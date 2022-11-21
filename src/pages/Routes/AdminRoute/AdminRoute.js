@@ -6,7 +6,7 @@ import Loader from '../../shared/Loader/Loader';
 
 const AdminRoute = ({ children }) => {
     const { user, loading } = useContext(AuthContext)
-    console.log(user)
+    // console.log(user)
     const location = useLocation()
     const [isAdmin, isAdminLoading] = useAdmin(user?.email)
 

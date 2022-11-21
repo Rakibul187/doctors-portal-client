@@ -13,17 +13,17 @@ const Services = () => {
             img: fluoride
         },
         {
-            id: 1,
+            id: 2,
             name: 'Cavity Filling',
             description: "Lorem Ipsum is simply dummy printing and typesetting indust Ipsum has been the",
             img: cavity
         },
         {
-            id: 1,
+            id: 3,
             name: 'Teeth Whitening',
             description: "Lorem Ipsum is simply dummy printing and typesetting indust Ipsum has been the",
             img: whitening
-        },
+        }
     ]
     return (
         <div className='mt-32'>

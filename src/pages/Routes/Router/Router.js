@@ -3,12 +3,13 @@ import DashboardLayout from "../../../Layout/Main/DashboardLayout/DashboardLayou
 import Main from "../../../Layout/Main/Main";
 import Appointment from "../../Appointment/Appointment/Appointment";
 import AddDoctor from "../../Dashboard/AddDoctor/AddDoctor";
-import Dashboard from "../../Dashboard/Dashboard/Dashboard";
+import ManageDoctors from "../../Dashboard/ManageDoctors/ManageDoctors";
 import MyAppointment from "../../Dashboard/MyAppointment/MyAppointment";
+import Payment from "../../Dashboard/Payment/Payment";
 import AllUsers from "../../Dashboard/ÂllUsers/AllUsers";
-import ErrorPage from "../../ErrorPage/ErrorPage";
 import Home from "../../Home/Home/Home";
 import Login from "../../Login/Login/Login";
+import DisplayError from "../../shared/DisplayError/DisplayError";
 import Signup from "../../Signup/Signup";
 import AdminRoute from "../AdminRoute/AdminRoute";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
     {
         path: '/',
         element: <Main></Main>,
+        errorElement: <DisplayError></DisplayError>,
         children: [
             {
                 path: '/', element: <Home></Home>
@@ -36,6 +38,7 @@ const router = createBrowserRouter([
     {
         path: '/dashboard',
         element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
+        errorElement: <DisplayError></DisplayError>,
         children: [
             {
                 path: "/dashboard",
@@ -49,10 +52,16 @@ const router = createBrowserRouter([
                 path: "/dashboard/adddoctor",
                 element: <AdminRoute><AddDoctor></AddDoctor></AdminRoute>
             },
+            {
+                path: "/dashboard/managedoctors",
+                element: <AdminRoute><ManageDoctors></ManageDoctors></AdminRoute>
+            },
+            {
+                path: "/dashboard/payment/:id",
+                element: <AdminRoute><Payment></Payment></AdminRoute>,
+                loader: ({ params }) => fetch(`http://localhost:5000/bookings/${params.id}`)
+            },
         ]
-    },
-    {
-        path: '*', element: <ErrorPage></ErrorPage>
     }
 ])
 
